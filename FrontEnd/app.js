@@ -7,6 +7,8 @@ const main = async () => {
   const category = await fetch("http://localhost:5678/api/categories");
   const categories = await category.json();
 
+  const logInBtn = document.querySelector("nav ul li:nth-child(3)");
+
   generateCategories(categories);
   generateWorks(works);
 
@@ -27,6 +29,10 @@ const main = async () => {
       }
     }
   });
+
+  logInBtn.addEventListener("click", () =>
+    window.location.assign("login.html")
+  );
 };
 
 const generateCategories = (categories) => {
