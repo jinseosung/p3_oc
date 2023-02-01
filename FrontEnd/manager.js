@@ -205,6 +205,24 @@ const changeBtnColor = (file, title, select, btn) => {
   select.addEventListener("change", onChange);
 };
 
+const previewInputImg = (file, div, icon, label, p) => {
+  const displayNon = (element) => (element.style.display = "none");
+  
+  file.addEventListener("change", (e) => {
+    const file = e.target.files;
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file[0]);
+    fileReader.addEventListener("load", (e) => {
+      displayNon(icon);
+      displayNon(label);
+      displayNon(p);
+      const img = document.createElement("img");
+      img.src = e.target.result;
+      div.appendChild(img);
+    });
+  });
+};
+
 const openAjoutPhotoModal = () => {
   resetModal();
 
@@ -270,6 +288,14 @@ const openAjoutPhotoModal = () => {
 
   generatecategoryoption(selectElement);
   onFormSubmit(formElement);
+
+  previewInputImg(
+    fileInputElement,
+    modalFileElement,
+    fileIconElement,
+    fileLabelElement,
+    pElement
+  );
 
   changeBtnColor(
     fileInputElement,
