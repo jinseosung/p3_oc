@@ -22,10 +22,10 @@ const main = async () => {
       if (!target.id) {
         generateWorks(works);
       } else {
-        const worksFiltres = works.filter(
+        const filteredWorks = works.filter(
           (work) => work.categoryId === parseInt(target.id)
         );
-        generateWorks(worksFiltres);
+        generateWorks(filteredWorks);
       }
     }
   });

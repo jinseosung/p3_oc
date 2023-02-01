@@ -1,7 +1,7 @@
 "use strict";
 
-const loginBtn = document.querySelector("#login form");
-loginBtn.addEventListener("submit", async (e) => {
+const logInBtn = document.querySelector("#login form");
+logInBtn.addEventListener("submit", async (e) => {
   e.preventDefault();
   const email = e.target.querySelector(`input[name="email"]`);
   const password = e.target.querySelector(`input[name="password"]`);

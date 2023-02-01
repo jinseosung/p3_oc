@@ -110,7 +110,6 @@ header {
 .modal__photos {
   width: 70%;
   padding: 3.3em 0;
-  border-bottom: 1px solid #b3b3b3;
   margin: 0 auto;
   display: grid;
   gap: 0.8em 0.4em;
@@ -137,10 +136,23 @@ header {
   margin: 0 auto;
 }
 
+.modal__line {
+  height: 1px;
+  width: 70%;
+  margin: 0 auto;
+  background-color: #b3b3b3;
+}
+
+.modal__line-ajout {
+  margin-top: 2em;
+  height: 1px;
+  width: 100%;
+  background-color: #b3b3b3;
+}
+
 .modal__form {
   width: 70%;
   padding: 3.3em 0;
-  border-bottom: 1px solid #b3b3b3;
   margin: 0 auto;
   text-align: left;
   margin-top: 30px;
@@ -166,9 +178,16 @@ header {
   background-color: #e8f1f6;
 }
 
+.modal__file i {
+  font-size: 4em;
+  display: flex;
+  color: #b9c5cc;
+  margin-bottom: 0.3em;
+}
+
 .modal__form label[for="file"] {
   display: inline-block;
-  padding: 1em 2em;
+  padding: 1em 3em;
   color: #306685;
   background-color: #cbd6dc;
   border-radius: 50px;
@@ -176,14 +195,11 @@ header {
 }
 
 .modal__form input[type="file"] {
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  border: 0;
+  display: none;
 }
 
 .modal__form p {
+  margin-top: 0.7em;
   font-size: 0.8em;
 }
 
@@ -222,5 +238,5 @@ header {
 
 .not-valid {
   background-color: #a7a7a7 !important;
-  border: none !important;
+  border: 1px solid #a7a7a7 !important;
 }
