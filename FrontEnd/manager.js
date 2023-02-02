@@ -39,16 +39,16 @@ const main = async () => {
   });
 
   window.addEventListener("keydown", (e) => {
-    if (
-      (modalElement.style.display === "flex" && e.key === "Escape") ||
-      e.key === "Esc"
-    ) {
+    if (modalElement.style.display !== "flex") {
+      return;
+    }
+    if (e.key === "Escape" || e.key === "Esc") {
       closeModal();
     }
   });
 };
 
-const generatePhotoEditeur = (works, photos) => {
+const generateModalPhotos = (works, photos) => {
   for (let i = 0; i < works.length; i++) {
     const article = works[i];
 
@@ -86,27 +86,27 @@ const generateModal = async () => {
 
   const titleElement = document.createElement("h3");
   titleElement.innerText = "Galerie photo";
-  const modalPhotosElement = document.createElement("div");
-  modalPhotosElement.classList.add("modal__photos");
-  const modalLineElement = document.createElement("div");
-  modalLineElement.classList.add("modal__line");
-  const modalBtnsElement = document.createElement("div");
-  modalBtnsElement.classList.add("modal__btns");
-  const ajoutPhotoBtn = document.createElement("button");
-  ajoutPhotoBtn.innerText = "Ajouter une photo";
+  const photosDivElement = document.createElement("div");
+  photosDivElement.classList.add("modal__photos");
+  const lineDivElement = document.createElement("div");
+  lineDivElement.classList.add("modal__line");
+  const btnsDivElement = document.createElement("div");
+  btnsDivElement.classList.add("modal__btns");
+  const addPhotoBtn = document.createElement("button");
+  addPhotoBtn.innerText = "Ajouter une photo";
   const deleteGalerieBtn = document.createElement("button");
   deleteGalerieBtn.innerText = "supprimer la galerie";
 
-  modalBtnsElement.appendChild(ajoutPhotoBtn);
-  modalBtnsElement.appendChild(deleteGalerieBtn);
+  btnsDivElement.appendChild(addPhotoBtn);
+  btnsDivElement.appendChild(deleteGalerieBtn);
   modalContainerElement.appendChild(titleElement);
-  modalContainerElement.appendChild(modalPhotosElement);
-  modalContainerElement.appendChild(modalLineElement);
-  modalContainerElement.appendChild(modalBtnsElement);
+  modalContainerElement.appendChild(photosDivElement);
+  modalContainerElement.appendChild(lineDivElement);
+  modalContainerElement.appendChild(btnsDivElement);
 
-  generatePhotoEditeur(works, modalPhotosElement);
+  generateModalPhotos(works, photosDivElement);
 
-  ajoutPhotoBtn.addEventListener("click", openAjoutPhotoModal);
+  addPhotoBtn.addEventListener("click", openAddPhotoModal);
 };
 
 const onLogOut = () => {
@@ -123,8 +123,8 @@ const closeModal = () => {
 };
 
 const addTrashBtn = () => {
-  const articleDeleteBtn = document.querySelectorAll(".modal__photo i");
-  articleDeleteBtn.forEach((btn) =>
+  const articleDeleteBtns = document.querySelectorAll(".modal__photo i");
+  articleDeleteBtns.forEach((btn) =>
     btn.addEventListener("click", async (e) => {
       const target = e.target.parentNode;
       const targetId = e.target.parentNode.id;
@@ -132,21 +132,22 @@ const addTrashBtn = () => {
         method: "DELETE",
         headers: { Authorization: `Bearer ${TOKEN}` },
       }).then((response) => {
-        if (response.status !== 401 && response.status !== 500) {
-          const figures = document.querySelectorAll(".gallery figure");
-          target.remove();
-          figures.forEach((figure) => {
-            if (targetId === figure.id) {
-              figure.remove();
-            }
-          });
+        if (response.status === 401 || response.status === 500) {
+          return;
         }
+        const figures = document.querySelectorAll(".gallery figure");
+        target.remove();
+        figures.forEach((figure) => {
+          if (targetId === figure.id) {
+            figure.remove();
+          }
+        });
       });
     })
   );
 };
 
-const generatecategoryoption = async (selectElement) => {
+const generateCategoryOption = async (selectElement) => {
   const category = await fetch("http://localhost:5678/api/categories");
   const categories = await category.json();
 
@@ -176,30 +177,18 @@ const onFormSubmit = (formElement) => {
       .then((result) => {
         const gallery = document.querySelector(".gallery");
 
-        const figureElement = document.createElement("figure");
-        figureElement.id = result.id;
-        const imageElement = document.createElement("img");
-        imageElement.setAttribute("crossorigin", "anonymous");
-        imageElement.src = result.imageUrl;
-        imageElement.alt = result.title;
-        const figcaptionElement = document.createElement("figcaption");
-        figcaptionElement.innerText = result.title;
-
-        figureElement.appendChild(imageElement);
-        figureElement.appendChild(figcaptionElement);
-        gallery.appendChild(figureElement);
+        generateFigure(result, gallery);
       });
   });
 };
 
 const changeBtnColor = (file, title, select, btn) => {
   const onChange = () => {
-    if (file.value && title.value && select.value) {
-      btn.classList.remove("not-valid");
-    } else {
-      btn.classList.add("not-valid");
-    }
+    file.value && title.value && select.value
+      ? btn.classList.remove("not-valid")
+      : btn.classList.add("not-valid");
   };
+
   file.addEventListener("change", onChange);
   title.addEventListener("input", onChange);
   select.addEventListener("change", onChange);
@@ -207,7 +196,7 @@ const changeBtnColor = (file, title, select, btn) => {
 
 const previewInputImg = (file, div, icon, label, p) => {
   const displayNon = (element) => (element.style.display = "none");
-  
+
   file.addEventListener("change", (e) => {
     const file = e.target.files;
     const fileReader = new FileReader();
@@ -223,15 +212,15 @@ const previewInputImg = (file, div, icon, label, p) => {
   });
 };
 
-const openAjoutPhotoModal = () => {
+const openAddPhotoModal = () => {
   resetModal();
 
   const titleElement = document.createElement("h3");
   titleElement.innerText = "Ajout photo";
   const formElement = document.createElement("form");
   formElement.classList.add("modal__form");
-  const modalFileElement = document.createElement("div");
-  modalFileElement.classList.add("modal__file");
+  const fileDivElement = document.createElement("div");
+  fileDivElement.classList.add("modal__file");
   const fileIconElement = document.createElement("i");
   fileIconElement.classList.add("fa-regular", "fa-image");
   const fileLabelElement = document.createElement("label");
@@ -261,37 +250,37 @@ const openAjoutPhotoModal = () => {
   selectElement.setAttribute("name", "category");
   selectElement.setAttribute("required", "required");
   const optionElement = document.createElement("option");
-  const modalLineElement = document.createElement("div");
-  modalLineElement.classList.add("modal__line-ajout");
-  const modalBtnsElement = document.createElement("div");
-  modalBtnsElement.classList.add("modal__btns");
-  const modalValidBtnElement = document.createElement("button");
-  modalValidBtnElement.setAttribute("type", "submit");
-  modalValidBtnElement.classList.add("modal__btn-valid", "not-valid");
-  modalValidBtnElement.innerText = "Valider";
+  const lineDivElement = document.createElement("div");
+  lineDivElement.classList.add("modal__line-ajout");
+  const btnsDivElement = document.createElement("div");
+  btnsDivElement.classList.add("modal__btns");
+  const validBtnElement = document.createElement("button");
+  validBtnElement.setAttribute("type", "submit");
+  validBtnElement.classList.add("modal__btn-valid", "not-valid");
+  validBtnElement.innerText = "Valider";
 
-  modalFileElement.appendChild(fileIconElement);
-  modalFileElement.appendChild(fileLabelElement);
-  modalFileElement.appendChild(fileInputElement);
-  modalFileElement.appendChild(pElement);
+  fileDivElement.appendChild(fileIconElement);
+  fileDivElement.appendChild(fileLabelElement);
+  fileDivElement.appendChild(fileInputElement);
+  fileDivElement.appendChild(pElement);
   selectElement.appendChild(optionElement);
-  modalBtnsElement.appendChild(modalValidBtnElement);
-  formElement.appendChild(modalFileElement);
+  btnsDivElement.appendChild(validBtnElement);
+  formElement.appendChild(fileDivElement);
   formElement.appendChild(titleLabelElement);
   formElement.appendChild(titleInputElement);
   formElement.appendChild(categoryLabelElement);
   formElement.appendChild(selectElement);
-  formElement.appendChild(modalLineElement);
-  formElement.appendChild(modalBtnsElement);
+  formElement.appendChild(lineDivElement);
+  formElement.appendChild(btnsDivElement);
   modalContainerElement.appendChild(titleElement);
   modalContainerElement.appendChild(formElement);
 
-  generatecategoryoption(selectElement);
+  generateCategoryOption(selectElement);
   onFormSubmit(formElement);
 
   previewInputImg(
     fileInputElement,
-    modalFileElement,
+    fileDivElement,
     fileIconElement,
     fileLabelElement,
     pElement
@@ -301,7 +290,7 @@ const openAjoutPhotoModal = () => {
     fileInputElement,
     titleInputElement,
     selectElement,
-    modalValidBtnElement
+    validBtnElement
   );
 };
 

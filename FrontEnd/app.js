@@ -15,18 +15,16 @@ const main = async () => {
   const categoriesListElement = document.querySelector(".categories-list");
   categoriesListElement.addEventListener("click", (e) => {
     const target = e.target;
-    const focusedClassName = document.querySelector(".focused");
-    if (target.tagName === "LI" && focusedClassName) {
-      focusedClassName.classList.remove("focused");
+    const filteredWorks = works.filter(
+      (work) => work.categoryId === parseInt(target.id)
+    );
+    const focusedCategory = document.querySelector(".focused");
+
+    if (target.tagName === "LI" && focusedCategory) {
+      focusedCategory.classList.remove("focused");
       target.classList.add("focused");
-      if (!target.id) {
-        generateWorks(works);
-      } else {
-        const filteredWorks = works.filter(
-          (work) => work.categoryId === parseInt(target.id)
-        );
-        generateWorks(filteredWorks);
-      }
+
+      !target.id ? generateWorks(works) : generateWorks(filteredWorks);
     }
   });
 
