@@ -70,7 +70,7 @@ const generateModalPhotos = (works, photos) => {
     photos.appendChild(articleElement);
   }
 
-  addTrashBtn();
+  addTrashBtns();
 };
 
 const resetModal = () => {
@@ -122,10 +122,10 @@ const closeModal = () => {
   modalElement.style.display = "none";
 };
 
-const addTrashBtn = () => {
-  const articleDeleteBtns = document.querySelectorAll(".modal__photo i");
-  articleDeleteBtns.forEach((btn) =>
-    btn.addEventListener("click", async (e) => {
+const addTrashBtns = () => {
+  const trashBtns = document.querySelectorAll(".modal__photo i");
+  trashBtns.forEach((trashBtn) =>
+    trashBtn.addEventListener("click", async (e) => {
       const target = e.target.parentNode;
       const targetId = e.target.parentNode.id;
       await fetch(`http://localhost:5678/api/works/${targetId}`, {
