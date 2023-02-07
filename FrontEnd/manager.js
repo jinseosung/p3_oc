@@ -183,8 +183,9 @@ const onFormSubmit = (formElement) => {
     })
       .then((response) => response.json())
       .then((result) => {
-        const gallery = document.querySelector(".gallery");
+        closeModal();
 
+        const gallery = document.querySelector(".gallery");
         generateFigure(result, gallery);
       });
   });
