@@ -73,8 +73,15 @@ const generateModalPhotos = (works, photos) => {
   addTrashBtns();
 };
 
+const addHiddenClass = () => {
+  backModalBtn.classList.add("hidden");
+};
+
+const removeHiddenClass = () => {
+  backModalBtn.classList.remove("hidden");
+};
+
 const resetModal = () => {
-  backModalBtn.classList.toggle("hidden");
   modalContainerElement.innerHTML = "";
 };
 
@@ -82,6 +89,7 @@ const generateModal = async () => {
   const response = await fetch("http://localhost:5678/api/works");
   const works = await response.json();
 
+  addHiddenClass();
   resetModal();
 
   const titleElement = document.createElement("h3");
@@ -213,6 +221,7 @@ const previewInputImg = (file, div, icon, label, p) => {
 };
 
 const openAddPhotoModal = () => {
+  removeHiddenClass();
   resetModal();
 
   const titleElement = document.createElement("h3");
