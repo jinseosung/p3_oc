@@ -77,7 +77,7 @@ const addHiddenClass = () => {
   backModalBtn.classList.add("hidden");
 };
 
-const removeHiddenClass = () => {
+const deleteHiddenClass = () => {
   backModalBtn.classList.remove("hidden");
 };
 
@@ -136,6 +136,7 @@ const addTrashBtns = () => {
     trashBtn.addEventListener("click", async (e) => {
       const target = e.target.parentNode;
       const targetId = e.target.parentNode.id;
+
       await fetch(`http://localhost:5678/api/works/${targetId}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${TOKEN}` },
@@ -143,6 +144,7 @@ const addTrashBtns = () => {
         if (response.status === 401 || response.status === 500) {
           return;
         }
+
         const figures = document.querySelectorAll(".gallery figure");
         target.remove();
         figures.forEach((figure) => {
@@ -159,13 +161,7 @@ const generateCategoryOption = async (selectElement) => {
   const category = await fetch("http://localhost:5678/api/categories");
   const categories = await category.json();
 
-  for (let i = 0; i < categories.length; i++) {
-    const category = categories[i];
-    const optionElement = document.createElement("option");
-    optionElement.value = category.id;
-    optionElement.innerText = category.name;
-    selectElement.appendChild(optionElement);
-  }
+  generateCategory(categories, "option", selectElement);
 };
 
 const onFormSubmit = (formElement) => {
@@ -222,7 +218,7 @@ const previewInputImg = (file, div, icon, label, p) => {
 };
 
 const openAddPhotoModal = () => {
-  removeHiddenClass();
+  deleteHiddenClass();
   resetModal();
 
   const titleElement = document.createElement("h3");

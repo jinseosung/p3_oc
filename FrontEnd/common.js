@@ -1,5 +1,15 @@
 "use strict";
 
+const generateCategory = (categories, childName, parentElement) => {
+  for (let i = 0; i < categories.length; i++) {
+    const category = categories[i];
+    const childElement = document.createElement(childName);
+    childElement.value = category.id;
+    childElement.innerText = category.name;
+    parentElement.appendChild(childElement);
+  }
+};
+
 const generateFigure = (figure, gallery) => {
   const figureElement = document.createElement("figure");
   figureElement.id = figure.id;

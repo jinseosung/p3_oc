@@ -13,24 +13,26 @@ const main = async () => {
   generateWorks(works);
 
   const categoriesListElement = document.querySelector(".categories-list");
-  categoriesListElement.addEventListener("click", (e) => {
-    const target = e.target;
-    const filteredWorks = works.filter(
-      (work) => work.categoryId === parseInt(target.id)
-    );
-    const focusedCategory = document.querySelector(".focused");
-
-    if (target.tagName === "LI" && focusedCategory) {
-      focusedCategory.classList.remove("focused");
-      target.classList.add("focused");
-
-      !target.id ? generateWorks(works) : generateWorks(filteredWorks);
-    }
-  });
+  categoriesListElement.addEventListener("click", (e) => filterWorks(e, works));
 
   logInBtn.addEventListener("click", () =>
     window.location.assign("login.html")
   );
+};
+
+const filterWorks = (e, works) => {
+  const target = e.target;
+  const filteredWorks = works.filter(
+    (work) => work.categoryId === parseInt(target.value)
+  );
+  const focusedCategory = document.querySelector(".focused");
+
+  if (target.tagName === "LI" && focusedCategory) {
+    focusedCategory.classList.remove("focused");
+    target.classList.add("focused");
+
+    !target.value ? generateWorks(works) : generateWorks(filteredWorks);
+  }
 };
 
 const generateCategories = (categories) => {
@@ -42,14 +44,8 @@ const generateCategories = (categories) => {
   tousListElement.innerText = "Tous";
   categoriesListElement.appendChild(tousListElement);
   mesProjetsElement.after(categoriesListElement);
-  for (let i = 0; i < categories.length; i++) {
-    const categorie = categories[i];
-
-    const listElement = document.createElement("li");
-    listElement.id = categorie.id;
-    listElement.innerText = categorie.name;
-    categoriesListElement.appendChild(listElement);
-  }
+  
+  generateCategory(categories, "li", categoriesListElement);
 };
 
 main();
