@@ -1,5 +1,13 @@
 "use strict";
 
+const justifyConnection = () => {
+  if (!localStorage.getItem("token")) {
+    main();
+  } else {
+    management();
+  }
+};
+
 const main = async () => {
   const response = await fetch("http://localhost:5678/api/works");
   const works = await response.json();
@@ -15,9 +23,7 @@ const main = async () => {
   const categoriesListElement = document.querySelector(".categories-list");
   categoriesListElement.addEventListener("click", (e) => filterWorks(e, works));
 
-  logInBtn.addEventListener("click", () =>
-    window.location.assign("login.html")
-  );
+  logInBtn.addEventListener("click", () => location.assign("login.html"));
 };
 
 const filterWorks = (e, works) => {
@@ -36,16 +42,16 @@ const filterWorks = (e, works) => {
 };
 
 const generateCategories = (categories) => {
-  const mesProjetsElement = document.querySelector("#portfolio h2");
+  const portfolioTitleElement = document.querySelector(".portfolio-title");
   const categoriesListElement = document.createElement("ul");
   categoriesListElement.classList.add("categories-list");
   const tousListElement = document.createElement("li");
   tousListElement.classList.add("focused");
   tousListElement.innerText = "Tous";
   categoriesListElement.appendChild(tousListElement);
-  mesProjetsElement.after(categoriesListElement);
-  
+  portfolioTitleElement.after(categoriesListElement);
+
   generateCategory(categories, "li", categoriesListElement);
 };
 
-main();
+justifyConnection();

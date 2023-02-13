@@ -9,11 +9,21 @@
 	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet">
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">
+	<link rel="stylesheet" href="./assets/manager.css">
+	<script src="https://kit.fontawesome.com/7a5ea5d2cb.js" crossorigin="anonymous"></script>
 	<script defer src="common.js"></script>
+	<script defer src="management.js"></script>
 	<script defer src="app.js"></script>
 </head>
 <body>
 <header>
+	<div class="modify-header">
+        <div class="edition-btn">
+            <i class="fa-regular fa-pen-to-square"></i>
+            <span>Mode édition</span>
+        </div>
+        <div class="publication-btn">publier les changements</div>
+    </div>
 	<h1>Sophie Bluel <span>Architecte d'inteérieur</span></h1>
 	<nav>
 		<ul>
@@ -28,8 +38,16 @@
 	<section id="introduction">
 		<figure>
 			<img src="./assets/images/sophie-bluel.png" alt="">
+			<div class="modify-btn hidden">
+                <i class="fa-regular fa-pen-to-square"></i>
+                <span>modifier</span>
+            </div>
 		</figure>
 		<article>
+			<div class="modify-btn hidden">
+                <i class="fa-regular fa-pen-to-square"></i>
+                <span>modifier</span>
+            </div>
 			<h2>Designer d'espace</h2>
 			<p>Je raconte votre histoire, je valorise vos idées. Je vous accompagne de la conception à la livraison finale du chantier.</p>
 			<p>Chaque projet sera étudié en commun, de façon à mettre en valeur les volumes, les matières et les couleurs dans le respect de l’esprit des lieux et le choix adapté des matériaux. Le suivi du chantier sera assuré dans le souci du détail, le respect du planning et du budget.</p>
@@ -37,52 +55,14 @@
 		</article>
 	</section>
 	<section id="portfolio">
-		<h2>Mes Projets</h2>
+		<div class="portfolio-title">
+			<h2>Mes Projets</h2>
+			<div class="modify-btn hidden">
+				<i class="fa-regular fa-pen-to-square"></i>
+				<span>modifier</span>
+			</div>
+		</div>
 		<div class="gallery">
-			<figure>
-				<img src="assets/images/abajour-tahina.png" alt="Abajour Tahina">
-				<figcaption>Abajour Tahina</figcaption>
-			</figure>
-			<figure>
-				<img src="assets/images/appartement-paris-v.png" alt="Appartement Paris V">
-				<figcaption>Appartement Paris V</figcaption>
-			</figure>
-			<figure>
-				<img src="assets/images/restaurant-sushisen-londres.png" alt="Restaurant Sushisen - Londres">
-				<figcaption>Restaurant Sushisen - Londres</figcaption>
-			</figure>
-			<figure>
-				<img src="assets/images/la-balisiere.png" alt="Villa “La Balisiere” - Port Louis">
-				<figcaption>Villa “La Balisiere” - Port Louis</figcaption>
-			</figure>
-			<figure>
-				<img src="assets/images/structures-thermopolis.png" alt="Structures Thermopolis">
-				<figcaption>Structures Thermopolis</figcaption>
-			</figure>
-			<figure>
-				<img src="assets/images/appartement-paris-x.png" alt="Appartement Paris X">
-				<figcaption>Appartement Paris X</figcaption>
-			</figure>
-			<figure>
-				<img src="assets/images/le-coteau-cassis.png" alt="Pavillon “Le coteau” - Cassis">
-				<figcaption>Pavillon “Le coteau” - Cassis</figcaption>
-			</figure>
-			<figure>
-				<img src="assets/images/villa-ferneze.png" alt="Villa Ferneze - Isola d’Elba">
-				<figcaption>Villa Ferneze - Isola d’Elba</figcaption>
-			</figure>
-			<figure>
-				<img src="assets/images/appartement-paris-xviii.png" alt="Appartement Paris XVIII">
-				<figcaption>Appartement Paris XVIII</figcaption>
-			</figure>
-			<figure>
-				<img src="assets/images/bar-lullaby-paris.png" alt="Bar “Lullaby” - Paris">
-				<figcaption>Bar “Lullaby” - Paris</figcaption>
-			</figure>
-			<figure>
-				<img src="assets/images/hotel-first-arte-new-delhi.png" alt="Hotel First Arte - New Delhi">
-				<figcaption>Hotel First Arte - New Delhi</figcaption>
-			</figure>
 		</div>
 	</section>
 	<section id="contact">
@@ -107,5 +87,17 @@
 		</ul>
 	</nav>
 </footer>
+
+<aside class="modal">
+    <div class="modal-wrapper">
+        <div class="modal__icons">
+            <i class="fa-solid fa-arrow-left-long"></i>
+            <i class="fa-solid fa-xmark"></i>
+        </div>
+        <div class="modal__container">
+        </div>
+    </div>
+</aside>
+
 </body>
 </html>

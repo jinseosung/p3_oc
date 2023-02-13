@@ -1,27 +1,29 @@
 "use strict";
 
-const TOKEN = localStorage.getItem("token");
-
-const logOutBtn = document.querySelector("nav ul li:nth-child(3)");
-const openModalBtn = document.querySelector("#portfolio .modify-btn");
 const modalElement = document.querySelector(".modal");
 const modalContainerElement = document.querySelector(".modal__container");
 const backModalBtn = document.querySelector(".modal__icons i:first-child");
-const closeModalBtn = document.querySelector(".modal__icons i:nth-child(2)");
 
-const main = async () => {
+const management = async () => {
   const response = await fetch("http://localhost:5678/api/works");
   const works = await response.json();
 
+  const openModalBtns = document.querySelectorAll(".modify-btn");
+  const logOutBtn = document.querySelector("nav ul li:nth-child(3)");
+
+  generateManagementPage(openModalBtns, logOutBtn);
   generateWorks(works);
 
   logOutBtn.addEventListener("click", onLogOut);
 
-  openModalBtn.addEventListener("click", () => {
-    openModal();
-    generateModal();
+  openModalBtns.forEach((openModalBtn) => {
+    openModalBtn.addEventListener("click", () => {
+      openModal();
+      generateModal();
+    });
   });
 
+  const closeModalBtn = document.querySelector(".modal__icons i:nth-child(2)");
   closeModalBtn.addEventListener("click", () => {
     closeModal();
   });
@@ -46,6 +48,18 @@ const main = async () => {
       closeModal();
     }
   });
+};
+
+const generateManagementPage = (openModalBtns, logOutBtn) => {
+  const modifyHeaderElement = document.querySelector(".modify-header");
+  openModalBtns.forEach((openModalBtn) => {
+    openModalBtn.classList.remove("hidden");
+  });
+
+  document.querySelector("header").classList.add("header-padding");
+  modifyHeaderElement.style.display = "flex";
+
+  logOutBtn.innerText = "logout";
 };
 
 const generateModalPhotos = (works, photos) => {
@@ -136,11 +150,16 @@ const addTrashBtns = () => {
     trashBtn.addEventListener("click", async (e) => {
       const target = e.target.parentNode;
       const targetId = e.target.parentNode.id;
+      const TOKEN = localStorage.getItem("token");
 
-      await fetch(`http://localhost:5678/api/works/${targetId}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${TOKEN}` },
-      }).then((response) => {
+      const response = await fetch(
+        `http://localhost:5678/api/works/${targetId}`,
+        {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${TOKEN}` },
+        }
+      );
+      if (response) {
         if (response.status === 401 || response.status === 500) {
           return;
         }
@@ -152,7 +171,7 @@ const addTrashBtns = () => {
             figure.remove();
           }
         });
-      });
+      }
     })
   );
 };
@@ -168,22 +187,24 @@ const onFormSubmit = (formElement) => {
   formElement.addEventListener("submit", async (e) => {
     e.preventDefault();
 
+    const TOKEN = localStorage.getItem("token");
     const formData = new FormData(formElement);
 
-    await fetch("http://localhost:5678/api/works", {
+    const response = await fetch("http://localhost:5678/api/works", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${TOKEN}`,
       },
       body: formData,
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        closeModal();
+    });
+    const result = await response.json();
 
-        const gallery = document.querySelector(".gallery");
-        generateFigure(result, gallery);
-      });
+    if (result) {
+      closeModal();
+
+      const gallery = document.querySelector(".gallery");
+      generateFigure(result, gallery);
+    }
   });
 };
 
@@ -299,5 +320,3 @@ const openAddPhotoModal = () => {
     validBtnElement
   );
 };
-
-main();
