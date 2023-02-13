@@ -1,15 +1,14 @@
 "use strict";
 
-const modalElement = document.querySelector(".modal");
-const modalContainerElement = document.querySelector(".modal__container");
-const backModalBtn = document.querySelector(".modal__icons i:first-child");
-
 const management = async () => {
   const response = await fetch("http://localhost:5678/api/works");
   const works = await response.json();
 
   const openModalBtns = document.querySelectorAll(".modify-btn");
   const logOutBtn = document.querySelector("nav ul li:nth-child(3)");
+  const modalElement = document.querySelector(".modal");
+  const modalContainerElement = document.querySelector(".modal__container");
+  const backModalBtn = document.querySelector(".modal__icons i:first-child");
 
   generateManagementPage(openModalBtns, logOutBtn);
   generateWorks(works);
@@ -18,18 +17,18 @@ const management = async () => {
 
   openModalBtns.forEach((openModalBtn) => {
     openModalBtn.addEventListener("click", () => {
-      openModal();
-      generateModal();
+      openModal(modalElement);
+      generateModal(modalContainerElement, backModalBtn);
     });
   });
 
   const closeModalBtn = document.querySelector(".modal__icons i:nth-child(2)");
   closeModalBtn.addEventListener("click", () => {
-    closeModal();
+    closeModal(modalElement);
   });
 
   backModalBtn.addEventListener("click", () => {
-    generateModal();
+    generateModal(modalContainerElement, backModalBtn);
   });
 
   modalElement.addEventListener("click", (e) => {
@@ -37,7 +36,7 @@ const management = async () => {
     if (target.className !== "modal") {
       return;
     }
-    closeModal();
+    closeModal(modalElement);
   });
 
   window.addEventListener("keydown", (e) => {
@@ -45,7 +44,7 @@ const management = async () => {
       return;
     }
     if (e.key === "Escape" || e.key === "Esc") {
-      closeModal();
+      closeModal(modalElement);
     }
   });
 };
@@ -87,24 +86,24 @@ const generateModalPhotos = (works, photos) => {
   addTrashBtns();
 };
 
-const addHiddenClass = () => {
+const addHiddenClass = (backModalBtn) => {
   backModalBtn.classList.add("hidden");
 };
 
-const deleteHiddenClass = () => {
+const deleteHiddenClass = (backModalBtn) => {
   backModalBtn.classList.remove("hidden");
 };
 
-const resetModal = () => {
+const resetModal = (modalContainerElement) => {
   modalContainerElement.innerHTML = "";
 };
 
-const generateModal = async () => {
+const generateModal = async (modalContainerElement, backModalBtn) => {
   const response = await fetch("http://localhost:5678/api/works");
   const works = await response.json();
 
-  addHiddenClass();
-  resetModal();
+  addHiddenClass(backModalBtn);
+  resetModal(modalContainerElement);
 
   const titleElement = document.createElement("h3");
   titleElement.innerText = "Galerie photo";
@@ -128,7 +127,9 @@ const generateModal = async () => {
 
   generateModalPhotos(works, photosDivElement);
 
-  addPhotoBtn.addEventListener("click", openAddPhotoModal);
+  addPhotoBtn.addEventListener("click", () => {
+    openAddPhotoModal(modalContainerElement, backModalBtn);
+  });
 };
 
 const onLogOut = () => {
@@ -136,11 +137,11 @@ const onLogOut = () => {
   location.assign("index.html");
 };
 
-const openModal = () => {
+const openModal = (modalElement) => {
   modalElement.style.display = "flex";
 };
 
-const closeModal = () => {
+const closeModal = (modalElement) => {
   modalElement.style.display = "none";
 };
 
@@ -200,7 +201,8 @@ const onFormSubmit = (formElement) => {
     const result = await response.json();
 
     if (result) {
-      closeModal();
+      const modalElement = document.querySelector(".modal");
+      closeModal(modalElement);
 
       const gallery = document.querySelector(".gallery");
       generateFigure(result, gallery);
@@ -238,9 +240,9 @@ const previewInputImg = (file, div, icon, label, p) => {
   });
 };
 
-const openAddPhotoModal = () => {
-  deleteHiddenClass();
-  resetModal();
+const openAddPhotoModal = (modalContainerElement, backModalBtn) => {
+  deleteHiddenClass(backModalBtn);
+  resetModal(modalContainerElement);
 
   const titleElement = document.createElement("h3");
   titleElement.innerText = "Ajout photo";
